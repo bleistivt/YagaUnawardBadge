@@ -63,7 +63,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         if(!C('Yaga.Badges.Enabled') || !CheckPermission('Yaga.Badges.Add')) return;
 
         $Sender->EventArguments['ProfileOptions'][] = array(
-            'Text' => Sprite('SpUnawardBadge', 'SpMod Sprite') . ' ' . T('Unaward Badges'),
+            'Text' => Sprite('SpAdminActivities SpNoBadge') . ' ' . T('Unaward Badges'),
             'Url' => '/profile/unawardbadges/'.$Sender->User->UserID.'/'.Gdn_Format::Url($Sender->User->Name)
         );
     }
