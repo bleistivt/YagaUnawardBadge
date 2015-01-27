@@ -7,7 +7,8 @@ $PluginInfo['YagaUnawardBadge'] = array(
     'RequiredApplications' => array('Yaga' => '1.0'),
     'MobileFriendly' => true,
     'Author' => 'Bleistivt',
-    'AuthorUrl' => 'http://bleistivt.net'
+    'AuthorUrl' => 'http://bleistivt.net',
+    'License' => 'GNU GPL2'
 );
 
 class YagaUnawardBadgePlugin extends Gdn_Plugin {
