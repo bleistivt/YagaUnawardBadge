@@ -3,7 +3,7 @@
 $PluginInfo['YagaUnawardBadge'] = array(
     'Name' => 'Yaga Unaward Badge',
     'Description' => 'Adds the option for users that can give out badges to take them away.',
-    'Version' => '0.1',
+    'Version' => '0.2',
     'RequiredApplications' => array('Yaga' => '1.0'),
     'MobileFriendly' => true,
     'Author' => 'Bleistivt',
