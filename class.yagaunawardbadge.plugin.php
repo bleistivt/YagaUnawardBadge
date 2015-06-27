@@ -1,4 +1,4 @@
-<?php if (!defined('APPLICATION')) exit();
+<?php
 
 $PluginInfo['YagaUnawardBadge'] = array(
     'Name' => 'Yaga Unaward Badge',
@@ -13,59 +13,55 @@ $PluginInfo['YagaUnawardBadge'] = array(
 
 class YagaUnawardBadgePlugin extends Gdn_Plugin {
 
-    public function ProfileController_UnawardBadges_Create($Sender, $UserID, $UserName = '') {
-        $Sender->Permission('Yaga.Badges.Add');
+    public function profileController_unawardBadges_create($sender, $userID, $userName = '') {
+        $sender->permission('Yaga.Badges.Add');
 
-        if (!$User = Gdn::Usermodel()->GetID($UserID)) {
-            throw NotFoundException('User');
+        if (!Gdn::usermodel()->getID($userID)) {
+            throw notFoundException('User');
         }
 
-        $Sender->GetUserInfo($UserID, $UserName);
-        $Sender->SetData('Badges', Yaga::BadgeAwardModel()->GetByUser($UserID));
-        $Sender->SetData('UserID', $UserID);
-        $Sender->SetData('Title', T('Unaward Badges'));
+        $sender->getUserInfo($userID, $userName);
+        $sender->setData('Badges', Yaga::badgeAwardModel()->getByUser($userID));
+        $sender->setData('UserID', $userID);
+        $sender->title(t('Unaward Badges'));
 
-        $Sender->Render('unaward', '', 'plugins/YagaUnawardBadge');
+        $sender->render('unaward', '', 'plugins/YagaUnawardBadge');
     }
 
-    public function BadgeController_Unaward_Create($Sender, $BadgeAwardID) {
-        $Sender->Permission('Yaga.Badges.Add');
+    public function badgeController_unaward_create($sender, $badgeAwardID) {
+        $sender->permission('Yaga.Badges.Add');
 
-        if (!$BadgeAward = Yaga::BadgeAwardModel()->GetID($BadgeAwardID)) {
-            throw NotFoundException('BadgeAward');
+        if (!$badgeAward = Yaga::badgeAwardModel()->getID($badgeAwardID)) {
+            throw notFoundException('BadgeAward');
         }
-        $Badge = Yaga::BadgeModel()->GetID($BadgeAward->BadgeID);
+        $badge = Yaga::badgeModel()->getID($badgeAward->BadgeID);
 
-        $Sender->SetData('Badgename', $Badge->Name);
-        $Sender->SetData('Username', Gdn::Usermodel()->GetID($BadgeAward->UserID)->Name);
+        $sender->setData('Badgename', $badge->Name);
+        $sender->setData('Username', Gdn::usermodel()->getID($badgeAward->UserID)->Name);
 
-        if ($Sender->Form->AuthenticatedPostBack()) {
-            Gdn::SQL()->Delete('BadgeAward', array('BadgeAwardID' => $BadgeAwardID), 1);
-            Gdn::SQL()
-                ->Update('User')
-                ->Set('CountBadges', 'CountBadges - 1', false)
-                ->Where('UserID', $BadgeAward->UserID)
-                ->Put();
-            if ($Badge) {
-                if (method_exists('Yaga', 'GivePoints')) {
-                    Yaga::GivePoints($BadgeAward->UserID, -1 * $Badge->AwardValue, 'Badge');
-                } else {
-                    UserModel::GivePoints($BadgeAward->UserID, -1 * $Badge->AwardValue, 'Badge');
-                }
+        if ($sender->Form->authenticatedPostBack()) {
+            Gdn::sql()->delete('BadgeAward', array('BadgeAwardID' => $badgeAwardID), 1);
+            Gdn::sql()
+                ->update('User')
+                ->set('CountBadges', 'CountBadges - 1', false)
+                ->where('UserID', $badgeAward->UserID)
+                ->put();
+            if ($badge) {
+                Yaga::givePoints($badgeAward->UserID, -1 * $badge->AwardValue, 'Badge');
             }
-            $Sender->InformMessage(T('The badge was successfully removed from this user.'));
-            $Sender->JsonTarget('#BadgeAward-'.$BadgeAwardID, '', 'Remove');
+            $sender->informMessage(t('The badge was successfully removed from this user.'));
+            $sender->jsonTarget('#BadgeAward-'.$badgeAwardID, '', 'Remove');
         }
-        $Sender->SetData('Title', T('Unaward Badge'));
-        $Sender->Render('delete', '', 'plugins/YagaUnawardBadge');
+        $sender->title(t('Unaward Badge'));
+        $sender->render('delete', '', 'plugins/YagaUnawardBadge');
     }
 
-    public function ProfileController_BeforeProfileOptions_Handler($Sender) {
-        if(!C('Yaga.Badges.Enabled') || !CheckPermission('Yaga.Badges.Add')) return;
+    public function profileController_beforeProfileOptions_handler($sender, &$args) {
+        if(!c('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) return;
 
-        $Sender->EventArguments['ProfileOptions'][] = array(
-            'Text' => Sprite('SpAdminActivities SpNoBadge') . ' ' . T('Unaward Badges'),
-            'Url' => '/profile/unawardbadges/'.$Sender->User->UserID.'/'.Gdn_Format::Url($Sender->User->Name)
+        $args['ProfileOptions'][] = array(
+            'Text' => sprite('SpAdminActivities SpNoBadge') . ' ' . t('Unaward Badges'),
+            'Url' => '/profile/unawardbadges/'.$sender->User->UserID.'/'.Gdn_Format::url($sender->User->Name)
         );
     }
 
