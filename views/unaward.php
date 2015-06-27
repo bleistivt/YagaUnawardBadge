@@ -1,13 +1,13 @@
 <?php if (!defined('APPLICATION')) exit(); 
 
-echo Wrap($this->Data('Title'), 'h1');
+echo wrap($this->data('Title'), 'h1');
 echo '<div id="Badges" class="Box Badges">';
-echo '<div class="DismissMessage InfoMessage">'.T('Click on the badge you want to take away from this user.').'</div>';
+echo '<div class="DismissMessage InfoMessage">'.t('Click on the badge you want to take away from this user.').'</div>';
 echo '<div class="PhotoGrid">';
-echo Wrap(sprintf(T('Badges of %s'), UserAnchor(Gdn::UserModel()->GetID($this->Data('UserID')))), 'h4');
-foreach($this->Data('Badges') as $Badge) {
-    echo Anchor(
-        Img(
+echo wrap(sprintf(t('Badges of %s'), userAnchor(Gdn::userModel()->getID($this->data('UserID')))), 'h4');
+foreach($this->data('Badges') as $Badge) {
+    echo anchor(
+        img(
             $Badge['Photo'],
             array('class' => 'ProfilePhoto')
         ),
