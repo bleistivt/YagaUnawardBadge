@@ -28,6 +28,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         $sender->render('unaward', '', 'plugins/YagaUnawardBadge');
     }
 
+
     public function badgeController_unaward_create($sender, $badgeAwardID) {
         $sender->permission('Yaga.Badges.Add');
 
@@ -56,11 +57,13 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         $sender->render('delete', '', 'plugins/YagaUnawardBadge');
     }
 
-    public function profileController_beforeProfileOptions_handler($sender, &$args) {
-        if(!c('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) return;
 
+    public function profileController_beforeProfileOptions_handler($sender, &$args) {
+        if (!c('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) {
+            return;
+        }
         $args['ProfileOptions'][] = array(
-            'Text' => sprite('SpAdminActivities SpNoBadge') . ' ' . t('Unaward Badges'),
+            'Text' => sprite('SpAdminActivities SpNoBadge').' '.t('Unaward Badges'),
             'Url' => '/profile/unawardbadges/'.$sender->User->UserID.'/'.Gdn_Format::url($sender->User->Name)
         );
     }
