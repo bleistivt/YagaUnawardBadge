@@ -1,15 +1,15 @@
 <?php
 
-$PluginInfo['YagaUnawardBadge'] = array(
+$PluginInfo['YagaUnawardBadge'] = [
     'Name' => 'Yaga Unaward Badge',
     'Description' => 'Adds the option for users that can give out badges to take them away.',
     'Version' => '0.2',
-    'RequiredApplications' => array('Yaga' => '1.0'),
+    'RequiredApplications' => ['Yaga' => '1.0'],
     'MobileFriendly' => true,
     'Author' => 'Bleistivt',
     'AuthorUrl' => 'http://bleistivt.net',
     'License' => 'GNU GPL2'
-);
+];
 
 class YagaUnawardBadgePlugin extends Gdn_Plugin {
 
@@ -41,7 +41,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         $sender->setData('Username', Gdn::usermodel()->getID($badgeAward->UserID)->Name);
 
         if ($sender->Form->authenticatedPostBack()) {
-            Gdn::sql()->delete('BadgeAward', array('BadgeAwardID' => $badgeAwardID), 1);
+            Gdn::sql()->delete('BadgeAward', ['BadgeAwardID' => $badgeAwardID], 1);
             Gdn::sql()
                 ->update('User')
                 ->set('CountBadges', 'CountBadges - 1', false)
@@ -62,10 +62,10 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         if (!c('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) {
             return;
         }
-        $args['ProfileOptions'][] = array(
+        $args['ProfileOptions'][] = [
             'Text' => sprite('SpAdminActivities SpNoBadge').' '.t('Unaward Badges'),
             'Url' => '/profile/unawardbadges/'.$sender->User->UserID.'/'.Gdn_Format::url($sender->User->Name)
-        );
+        ];
     }
 
 }
