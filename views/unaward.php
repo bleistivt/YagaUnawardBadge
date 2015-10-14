@@ -1,6 +1,6 @@
 <?php if (!defined('APPLICATION')) exit(); 
 
-echo wrap($this->data('Title'), 'h1');
+echo wrap($this->title(), 'h1');
 ?>
 
 <div id="Badges" class="Box Badges">
