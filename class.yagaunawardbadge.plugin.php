@@ -1,16 +1,5 @@
 <?php
 
-$PluginInfo['YagaUnawardBadge'] = [
-    'Name' => 'Yaga Unaward Badge',
-    'Description' => 'Adds the option for users that can give out badges to take them away.',
-    'Version' => '0.2',
-    'RequiredApplications' => ['Yaga' => '1.0'],
-    'MobileFriendly' => true,
-    'Author' => 'Bleistivt',
-    'AuthorUrl' => 'http://bleistivt.net',
-    'License' => 'GNU GPL2'
-];
-
 class YagaUnawardBadgePlugin extends Gdn_Plugin {
 
     public function profileController_unawardBadges_create($sender, $userID, $userName = '') {
