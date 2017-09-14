@@ -1,5 +1,7 @@
 <?php if (!defined('APPLICATION')) exit(); 
 
+$this->Form->setStyles('legacy');
+
 echo wrap($this->title(), 'h1'),
 
     $this->Form->open(),
