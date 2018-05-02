@@ -1,9 +1,10 @@
 {
     "name": "Yaga Unaward Badge",
     "description": "Adds the option for users that can give out badges to take them away.",
-    "version": "0.2",
+    "version": "0.3",
     "mobileFriendly": true,
     "license": "GNU GPL2",
+    "gitHub": "bleistivt/YagaUnawardBadge",
     "key": "yagaunawardbadge",
     "type": "addon",
     "authors": [
