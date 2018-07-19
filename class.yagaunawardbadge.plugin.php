@@ -47,7 +47,8 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
     }
 
 
-    public function profileController_beforeProfileOptions_handler($sender, &$args) {
+    public function profileController_beforeProfileOptions_handler($sender) {
+        $args = &$sender->EventArguments;
         if (!c('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) {
             return;
         }
