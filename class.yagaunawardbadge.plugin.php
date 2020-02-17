@@ -12,7 +12,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         $sender->getUserInfo($userID, $userName);
         $sender->setData('Badges', Yaga::badgeAwardModel()->getByUser($userID));
         $sender->setData('UserID', $userID);
-        $sender->title(t('Unaward Badges'));
+        $sender->title(Gdn::translate('YagaUnawardBadge.UnawardBadges'));
 
         $sender->render('unaward', '', 'plugins/YagaUnawardBadge');
     }
@@ -21,9 +21,11 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
     public function badgeController_unaward_create($sender, $badgeAwardID) {
         $sender->permission('Yaga.Badges.Add');
 
-        if (!$badgeAward = Yaga::badgeAwardModel()->getID($badgeAwardID)) {
+        $badgeAward = Yaga::badgeAwardModel()->getID($badgeAwardID);
+        if (!$badgeAward) {
             throw notFoundException('BadgeAward');
         }
+
         $badge = Yaga::badgeModel()->getID($badgeAward->BadgeID);
 
         $sender->setData('Badgename', $badge->Name);
@@ -31,29 +33,35 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
 
         if ($sender->Form->authenticatedPostBack()) {
             Gdn::sql()->delete('BadgeAward', ['BadgeAwardID' => $badgeAwardID], 1);
+
             Gdn::sql()
                 ->update('User')
                 ->set('CountBadges', 'CountBadges - 1', false)
                 ->where('UserID', $badgeAward->UserID)
                 ->put();
+
             if ($badge) {
                 Yaga::givePoints($badgeAward->UserID, -1 * $badge->AwardValue, 'Badge');
             }
-            $sender->informMessage(t('The badge was successfully removed from this user.'));
+
+            $sender->informMessage(Gdn::translate('YagaUnawardBadge.Success'));
             $sender->jsonTarget('#BadgeAward-'.$badgeAwardID, '', 'Remove');
         }
-        $sender->title(t('Unaward Badge'));
+
+        $sender->title(Gdn::translate('YagaUnawardBadge.UnawardBadge'));
         $sender->render('delete', '', 'plugins/YagaUnawardBadge');
     }
 
 
     public function profileController_beforeProfileOptions_handler($sender) {
         $args = &$sender->EventArguments;
-        if (!c('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) {
+
+        if (!Gdn::config('Yaga.Badges.Enabled') || !checkPermission('Yaga.Badges.Add')) {
             return;
         }
+
         $args['ProfileOptions'][] = [
-            'Text' => sprite('SpAdminActivities SpNoBadge').' '.t('Unaward Badges'),
+            'Text' => sprite('SpAdminActivities SpNoBadge').' '.Gdn::translate('YagaUnawardBadge.UnawardBadges'),
             'Url' => '/profile/unawardbadges/'.$sender->User->UserID.'/'.Gdn_Format::url($sender->User->Name)
         ];
     }

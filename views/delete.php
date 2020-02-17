@@ -9,7 +9,7 @@ echo wrap($this->title(), 'h1'),
 
     '<div class="P">',
     sprintf(
-        T('Are you sure you want to take away <em style="font-style:italic;">%s</em> from %s? If the the conditions for receiving this badge are still met, it will be awarded again.'),
+        Gdn::translate('YagaUnawardBadge.Confirm'),
         $this->data('Badgename'),
         $this->data('Username')
     ),
