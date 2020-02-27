@@ -32,7 +32,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         $sender->setData('Username', Gdn::usermodel()->getID($badgeAward->UserID)->Name);
 
         if ($sender->Form->authenticatedPostBack()) {
-            Gdn::sql()->delete('BadgeAward', ['BadgeAwardID' => $badgeAwardID], 1);
+            Gdn::sql()->delete('YagaBadgeAward', ['BadgeAwardID' => $badgeAwardID], 1);
 
             Gdn::sql()
                 ->update('User')
