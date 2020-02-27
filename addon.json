@@ -1,7 +1,7 @@
 {
     "name": "Yaga Unaward Badge",
     "description": "Adds the option for users that can give out badges to take them away.",
-    "version": "0.5",
+    "version": "0.6",
     "hasLocale": true,
     "mobileFriendly": true,
     "license": "GNU GPL2",
