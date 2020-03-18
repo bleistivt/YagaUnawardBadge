@@ -10,7 +10,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
         }
 
         $sender->getUserInfo($userID, $userName);
-        $sender->setData('Badges', Yaga::badgeAwardModel()->getByUser($userID));
+        $sender->setData('Badges', Gdn::getContainer()->get(BadgeAwardModel::class)->getByUser($userID));
         $sender->setData('UserID', $userID);
         $sender->title(Gdn::translate('YagaUnawardBadge.UnawardBadges'));
 
@@ -21,12 +21,12 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
     public function badgeController_unaward_create($sender, $badgeAwardID) {
         $sender->permission('Yaga.Badges.Add');
 
-        $badgeAward = Yaga::badgeAwardModel()->getID($badgeAwardID);
+        $badgeAward = $sender->BadgeAwardModel()->getID($badgeAwardID);
         if (!$badgeAward) {
             throw notFoundException('BadgeAward');
         }
 
-        $badge = Yaga::badgeModel()->getID($badgeAward->BadgeID);
+        $badge = $sender->BadgeModel()->getID($badgeAward->BadgeID);
 
         $sender->setData('Badgename', $badge->Name);
         $sender->setData('Username', Gdn::usermodel()->getID($badgeAward->UserID)->Name);
@@ -41,7 +41,7 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
                 ->put();
 
             if ($badge) {
-                Yaga::givePoints($badgeAward->UserID, -1 * $badge->AwardValue, 'Badge');
+                UserModel::givePoints($badgeAward->UserID, -1 * $badge->AwardValue, 'Badge');
             }
 
             $sender->informMessage(Gdn::translate('YagaUnawardBadge.Success'));
