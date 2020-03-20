@@ -21,18 +21,18 @@ class YagaUnawardBadgePlugin extends Gdn_Plugin {
     public function badgeController_unaward_create($sender, $badgeAwardID) {
         $sender->permission('Yaga.Badges.Add');
 
-        $badgeAward = $sender->BadgeAwardModel()->getID($badgeAwardID);
+        $badgeAward = $sender->BadgeAwardModel->getID($badgeAwardID);
         if (!$badgeAward) {
             throw notFoundException('BadgeAward');
         }
 
-        $badge = $sender->BadgeModel()->getID($badgeAward->BadgeID);
+        $badge = $sender->BadgeModel->getID($badgeAward->BadgeID);
 
         $sender->setData('Badgename', $badge->Name);
         $sender->setData('Username', Gdn::usermodel()->getID($badgeAward->UserID)->Name);
 
         if ($sender->Form->authenticatedPostBack()) {
-            Gdn::sql()->delete('YagaBadgeAward', ['BadgeAwardID' => $badgeAwardID], 1);
+            $sender->BadgeAwardModel->deleteID($badgeAwardID);
 
             Gdn::sql()
                 ->update('User')
